@@ -1,28 +1,21 @@
-<<<<<<< HEAD
 # tfjs-posenet-test
-=======
-# pose-est-demo
 
+## Purpose
+```
+tensorflow.js pose-est-demo with vue3
+```
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Reference
+[posenet-similarity](https://github.com/freshsomebody/posenet-similarity)
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> 63833b3149ff85c5d625afb88678e78d4cacaf18
+[두 사람의 동작 유사도 계산하기](https://blog.solarmagic.dev/ml/2021/04/16/pose-similarity/)
