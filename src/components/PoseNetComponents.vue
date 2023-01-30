@@ -18,30 +18,48 @@ export default {
 
     methods: {
 
-        async estimate(imageElement){
+        async loadModel(){
             this.net = await posenet.load();
-            // console.log(this.net);
+
+            return this.net? true:false;
+        }, 
+
+        async estimate(imageElement, modelConfig){
+            this.net = await posenet.load(modelConfig);
+            console.log(this.net);
             // console.log(imageElement.src);
+            var startInference = Date.now();
             const pose = await this.net.estimateSinglePose(imageElement, 0.5, this.flipHorizontal, this.outputStride);
+            console.log('inf time : ', Math.floor((Date.now() - startInference)/1000));
             return pose;
         },
 
         async calPose(){
             const pose1Image = document.getElementById('test1');
-            const pose2Image = document.getElementById('test2');
-
+            const pose2Image = document.getElementById('test3');
+            var startInference = Date.now();
+            // this.net = await posenet.load();
             Promise.all([
-                this.estimate(pose1Image),
-                this.estimate(pose2Image)
+                this.estimate(pose1Image, {architecture : "MobileNetV1", multiplier: 0.5}),
+                this.estimate(pose2Image, {architecture : "MobileNetV1"})
             ]).then(poses => {
+                console.log('inf time : ', Math.floor((Date.now() - startInference)/1000));
+                
+                startInference = Date.now();
                 const weightedDistance = poseSimilarity(poses[0], poses[1], {strategy: 'weightedDistance'});
-                // console.log(poses);
+                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
                 console.log('Weight Distance : ', weightedDistance);
-
+                
+                
+                startInference = Date.now();
                 const cosineDistance = poseSimilarity(poses[0], poses[1], {strategy: 'cosineDistance'});
+                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
                 console.log('Cosine Distance : ', cosineDistance);
-
+                
+                
+                startInference = Date.now();
                 const cosineSimilarity = poseSimilarity(poses[0], poses[1], {strategy: 'cosineSimilarity'});
+                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
                 console.log('Cosine similarity : ', cosineSimilarity);
             });
         }
@@ -56,6 +74,8 @@ export default {
         });
 
         console.log(tf.getBackend());
+
+        // this.loadModel();
 
         return {
             ...state,
