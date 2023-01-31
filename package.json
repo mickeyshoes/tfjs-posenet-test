@@ -11,11 +11,14 @@
     "@tensorflow-models/posenet": "^2.2.2",
     "@tensorflow/tfjs": "^4.2.0",
     "@tensorflow/tfjs-backend-cpu": "^3.21.0",
+    "@tensorflow/tfjs-converter": "^3.21.0",
     "@tensorflow/tfjs-core": "^3.21.0",
     "@tensorflow/tfjs-node": "^4.2.0",
+    "axios": "^1.2.6",
     "core-js": "^3.8.3",
     "posenet-similarity": "^0.4.8",
     "vue": "^3.2.13",
+    "vue-plugin-axios": "^1.0.14",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },
@@ -27,8 +30,10 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "axios": "^0.18.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-cli-plugin-axios": "~0.0.4"
   },
   "eslintConfig": {
     "root": true,
