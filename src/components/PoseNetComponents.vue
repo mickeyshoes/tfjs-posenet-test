@@ -22,19 +22,13 @@ export default {
 
     methods: {
 
-        async loadModel(){
-            this.net = await posenet.load();
-
-            return this.net? true:false;
-        }, 
-
         async estimate(imageElement, modelConfig){
             this.net = await posenet.load(modelConfig);
-            console.log(this.net);
+            // console.log(this.net);
             // console.log(imageElement.src);
-            var startInference = Date.now();
+            var infStartTime = Date.now();
             const pose = await this.net.estimateSinglePose(imageElement, 0.5, this.flipHorizontal, this.outputStride);
-            console.log('inf time : ', Math.floor((Date.now() - startInference)/1000));
+            console.log('inf time : ', Math.floor((Date.now() - infStartTime)/1000));
             return pose;
         },
 
@@ -55,30 +49,26 @@ export default {
         async calPose(){
             const pose1Image = document.getElementById('test1');
             const pose2Image = document.getElementById('test3');
-            var startInference = Date.now();
-            // this.net = await posenet.load();
+
             Promise.all([
-                this.estimate(pose1Image, {architecture : "MobileNetV1", multiplier: 0.5}),
-                this.estimate(pose2Image, {architecture : "MobileNetV1"})
-            ]).then(poses => {
-                console.log('inf time : ', Math.floor((Date.now() - startInference)/1000));
+                this.estimate(pose1Image),
+                this.estimate(pose2Image)
+            ]).then(async poses => {
                 
-                startInference = Date.now();
-                const weightedDistance = poseSimilarity(poses[0], poses[1], {strategy: 'weightedDistance'});
-                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
-                console.log('Weight Distance : ', weightedDistance);
+                const weightResult  = await this.calSimilarity({strategy: 'weightedDistance'}, ...poses);
+                // console.log(weightResult);
+
+                const cosineDistance  = await this.calSimilarity({strategy: 'cosineDistance'}, ...poses);
+                // console.log(cosineDistance);
+
+                const cosineSimilarity  = await this.calSimilarity({strategy: 'cosineSimilarity'}, ...poses);
+                // console.log(cosineSimilarity);
                 
-                
-                startInference = Date.now();
-                const cosineDistance = poseSimilarity(poses[0], poses[1], {strategy: 'cosineDistance'});
-                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
-                console.log('Cosine Distance : ', cosineDistance);
-                
-                
-                startInference = Date.now();
-                const cosineSimilarity = poseSimilarity(poses[0], poses[1], {strategy: 'cosineSimilarity'});
-                console.log('inf time for similarity: ', Math.floor((Date.now() - startInference)/1000));
-                console.log('Cosine similarity : ', cosineSimilarity);
+                this.resultMsg += this.serializeObject(weightResult) +'\n' 
+                                + this.serializeObject(cosineDistance) + '\n' 
+                                + this.serializeObject(cosineSimilarity) + '\n';
+
+                alert(this.resultMsg);
             });
         }
     },
@@ -93,8 +83,6 @@ export default {
         });
 
         console.log(tf.getBackend());
-
-        // this.loadModel();
 
         return {
             ...state,
