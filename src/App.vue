@@ -1,7 +1,8 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">pose-net</router-link> |
+    <router-link to="/move">move-net</router-link> |
+    <router-link to="/about">kakao-api</router-link>
   </nav>
   <router-view/>
 </template>
